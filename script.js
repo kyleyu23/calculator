@@ -2,6 +2,7 @@ class Calculator {
     constructor(previousOperandTextElement, currentOperandTextElement) {
         this.previousOperandTextElement = previousOperandTextElement;
         this.currentOperandTextElement = currentOperandTextElement;
+        //initialize
         this.clear();
     }
     clear() {
@@ -48,12 +49,32 @@ class Calculator {
         this.previousOperand = '';
         this.operater = '';
     }
+    getDisplayNumber(number) {
+        //split "123.456"
+        const stringNumber = number.toString();
+        const integerDigits = parseFloat(stringNumber.split('.')[0]);
+        const decimalDigits = stringNumber.split('.')[1];
+
+        //concat integer and decimals
+        let integerDisplay;
+        if (isNaN(integerDigits)) integerDisplay = '';
+        else {
+            integerDisplay = integerDigits.toLocaleString('en');
+        }
+        return decimalDigits != null ? `${integerDisplay}.${decimalDigits}` : integerDisplay;
+
+        /*
+        //works but has problems with decimals
+        const floatNumber = parseFloat(number);
+        if ((isNaN(floatNumber))) return '';
+        return floatNumber.toLocaleString('en');
+        */
+    }
     updateDisplay() {
-        this.currentOperandTextElement.innerText = this.currentOperand;
-        if (this.operater !== null) {
-            this.previousOperandTextElement.innerText = this.previousOperand + this.operater;
-        } else {
-            this.previousOperandTextElement.innerText = this.previousOperand;
+        this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
+        if (this.operater != null) {
+            this.previousOperandTextElement.innerText =
+                `${this.getDisplayNumber(this.previousOperand)} ${this.operater}`
         }
     }
 }
